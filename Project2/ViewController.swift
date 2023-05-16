@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     
     var countries: [String] = []
     var score = 0
+    // Flags 0, 1 or 2 will be the correct answer
+    var correctAnswer = 0
     
     
 // MARK: - Setup
@@ -49,11 +51,20 @@ class ViewController: UIViewController {
 
     // Show 3 random flags
     func askQuestion() {
+        // Randomize the flags that will be added to the buttons.
+        countries.shuffle()
+        
         // button.setImage assigns a UIImage to the button. The image's name is the position in the array.
         // for: .normal means the button's state that should be changed is the standard state of the button.
         button1.setImage(UIImage(named: countries[0]), for: .normal)
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
+        
+        // Defines the correct answer.
+        correctAnswer = Int.random(in: 0...2)
+        
+        // Sets the title to the "correct answer" so the player know which flag they need to tap.
+        title = countries[correctAnswer].uppercased()
     }
     
     
