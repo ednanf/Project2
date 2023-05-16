@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     var score = 0
     // Flags 0, 1 or 2 will be the correct answer
     var correctAnswer = 0
+    var answeredQuestions = 0
     
     
 // MARK: - Setup
@@ -88,8 +89,9 @@ class ViewController: UIViewController {
         // Defines the correct answer.
         correctAnswer = Int.random(in: 0...2)
         
-        // Sets the title to the "correct answer" so the player know which flag they need to tap.
-        title = countries[correctAnswer].uppercased()
+        // Sets the navigation bar's title to the "correct answer" so the player know which flag they need to tap.
+        // ***CHALLENGE 1*** - Show the score in the navigation bar
+        title = "Which is the flag of \(countries[correctAnswer].uppercased())? | Score: \(score)"
     }
     
     
