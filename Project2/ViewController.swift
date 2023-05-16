@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     var score = 0
     // Flags 0, 1 or 2 will be the correct answer
     var correctAnswer = 0
-    // Keeps track of how many questions the player answered (part of Challenge 2).
+    // Keeps track of how many questions the player answered (part of CHALLENGE 2).
     var answeredQuestions = 0
     
     
@@ -53,18 +53,33 @@ class ViewController: UIViewController {
     
     // IBAction is a way of making storyboard layouts trigger code.
     @IBAction func buttonTapped(_ sender: UIButton) {
-        
-                                                // .tag was defined in the property inspector in Storyboard.
-        if sender.tag == correctAnswer {        // If the tag number matches the correctAnswer (set in askQuestion()),
-            score += 1                          // add 1 to the score,
-            answeredQuestions += 1              // add 1 to answeredQuestions (part of Challenge 2), and
-            alertPrompts()                      // display the correct alert.
-        } else {                                // else,
-            score -= 1                          // remove 1 from the score.
-            answeredQuestions += 1              // add 1 to answeredQuestions (part of Challenge 2), and
-            alertPrompts()                      // display the correct alert.
+        var title: String
+        let number = sender.tag
+                                                                                // .tag was defined in the property inspector in Storyboard.
+        if number == correctAnswer {                                            // If the tag number matches the correctAnswer (set in askQuestion()),
+            title = "Correct!"                                                  // set the title
+            score += 1                                                          // add 1 to the score,
+        } else {                                                                // else,
+            // ***CHALLENGE 3***
+            title = "Wrong! That's the flag of \(countries[number].uppercased())"
+            score -= 1                                                          // remove 1 from the score.
         }
-
+        
+        // ***Part of CHALLENGE 2***
+        answeredQuestions += 1
+        
+        // Alert prompt
+        let ac = UIAlertController(title: title, message: "Your score is \(score)", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+        
+        // ***CHALLENGE 2***
+        if answeredQuestions <= 9 {
+            // Presents the regular alert prompt
+            present(ac, animated: true)
+        } else {
+            // Presents the final alert prompt + sets up a new match.
+            finishedGame()
+        }
     }
     
 // MARK: - Functions
@@ -88,20 +103,18 @@ class ViewController: UIViewController {
         title = "Which is the flag of \(countries[correctAnswer].uppercased())? | Score: \(score)"
     }
     
-    // ***Challenge 2*** - keep track of how many tries the player did, limit to 10 and and make a final prompt with their score.
-    func alertPrompts() {
-        if answeredQuestions == 2 {
+    // ***Part of CHALLENGE 2***
+    func finishedGame() {
+        
             let alertFinished = UIAlertController(title: "Finished", message: "Your final score is \(score)", preferredStyle: .alert)
             alertFinished.addAction(UIAlertAction(title: "Restart", style: .default))
             present(alertFinished, animated: true)
+            
             score = 0
+            
             answeredQuestions = 0
-        } else {
-            // The original lesson's alert, except the title was changed to nil to look better.
-            let ac = UIAlertController(title: nil, message: "Your score is \(score).", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
-            present(ac, animated: true)
-        }
     }
+    
+    
 }
 
