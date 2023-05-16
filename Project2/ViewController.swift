@@ -42,15 +42,40 @@ class ViewController: UIViewController {
         button2.layer.borderColor = UIColor.lightGray.cgColor
         button3.layer.borderColor = UIColor.lightGray.cgColor
         
-        askQuestion()
+        askQuestion(action: nil) // nil because there's not UIAlertAction for this specific call.
         
     }
 
     
+// MARK: - IBActions
+    
+    // IBAction is a way of making storyboard layouts trigger code.
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        var title: String
+                                                // .tag was defined in the property inspector in Storyboard.
+        if sender.tag == correctAnswer {        // If the tag number matches the correctAnswer (set in askQuestion()),
+            title = "Correct"                   // change the title value to "Correct", and
+            score += 1                          // add 1 to the score
+        } else {                                // else,
+            title = "Wrong"                     // set the title to "Wrong", and
+            score -= 1                          // remove 1 from the score.
+        }
+        
+        // Makes an alert and shows the score.
+        let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .alert)
+        
+        // Adds a "Continue" button to the alert.
+        // The handler is askQuestion, because the intent is to continue the game by calling askQuestion again. ATTENTION: not askQuestion()! The handler needs to know the *name* of the method, not to run the method itself!
+        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+        
+        // Calls the alert.
+        present(ac, animated: true)
+    }
+    
 // MARK: - Functions
 
     // Show 3 random flags
-    func askQuestion() {
+    func askQuestion(action: UIAlertAction!) {
         // Randomize the flags that will be added to the buttons.
         countries.shuffle()
         
