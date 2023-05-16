@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     var score = 0
     // Flags 0, 1 or 2 will be the correct answer
     var correctAnswer = 0
+    // Keeps track of how many questions the player answered (part of Challenge 2).
     var answeredQuestions = 0
     
     
@@ -52,25 +53,18 @@ class ViewController: UIViewController {
     
     // IBAction is a way of making storyboard layouts trigger code.
     @IBAction func buttonTapped(_ sender: UIButton) {
-        var title: String
+        
                                                 // .tag was defined in the property inspector in Storyboard.
         if sender.tag == correctAnswer {        // If the tag number matches the correctAnswer (set in askQuestion()),
-            title = "Correct"                   // change the title value to "Correct", and
-            score += 1                          // add 1 to the score
+            score += 1                          // add 1 to the score,
+            answeredQuestions += 1              // add 1 to answeredQuestions (part of Challenge 2), and
+            alertPrompts()                      // display the correct alert.
         } else {                                // else,
-            title = "Wrong"                     // set the title to "Wrong", and
             score -= 1                          // remove 1 from the score.
+            answeredQuestions += 1              // add 1 to answeredQuestions (part of Challenge 2), and
+            alertPrompts()                      // display the correct alert.
         }
-        
-        // Makes an alert and shows the score.
-        let ac = UIAlertController(title: title, message: "Your score is \(score).", preferredStyle: .alert)
-        
-        // Adds a "Continue" button to the alert.
-        // The handler is askQuestion, because the intent is to continue the game by calling askQuestion again. ATTENTION: not askQuestion()! The handler needs to know the *name* of the method, not to run the method itself!
-        ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
-        
-        // Calls the alert.
-        present(ac, animated: true)
+
     }
     
 // MARK: - Functions
@@ -94,6 +88,20 @@ class ViewController: UIViewController {
         title = "Which is the flag of \(countries[correctAnswer].uppercased())? | Score: \(score)"
     }
     
-    
+    // ***Challenge 2*** - keep track of how many tries the player did, limit to 10 and and make a final prompt with their score.
+    func alertPrompts() {
+        if answeredQuestions == 2 {
+            let alertFinished = UIAlertController(title: "Finished", message: "Your final score is \(score)", preferredStyle: .alert)
+            alertFinished.addAction(UIAlertAction(title: "Restart", style: .default))
+            present(alertFinished, animated: true)
+            score = 0
+            answeredQuestions = 0
+        } else {
+            // The original lesson's alert, except the title was changed to nil to look better.
+            let ac = UIAlertController(title: nil, message: "Your score is \(score).", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+            present(ac, animated: true)
+        }
+    }
 }
 
