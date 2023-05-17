@@ -32,6 +32,9 @@ class ViewController: UIViewController {
         // Populate the array with countries -- the names matches the filenames.
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
         
+        // ***CHALLENGE 3 from project 3***: add a bar button item that shows their score when tapped.
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Score", style: .plain, target: self, action: #selector(showScoreButton))
+        
         // Adds a border to the flags so the black/white won't blend into the background.
         button1.layer.borderWidth = 1
         button2.layer.borderWidth = 1
@@ -100,7 +103,7 @@ class ViewController: UIViewController {
         
         // Sets the navigation bar's title to the "correct answer" so the player know which flag they need to tap.
         // ***CHALLENGE 1*** - Show the score in the navigation bar
-        title = "Which is the flag of \(countries[correctAnswer].uppercased())? | Score: \(score)"
+        title = "Which is the flag of \(countries[correctAnswer].uppercased())?"
     }
     
     // ***Part of CHALLENGE 2***
@@ -116,5 +119,9 @@ class ViewController: UIViewController {
     }
     
     
+    @objc func showScoreButton() {
+        let scoreAlert = UIAlertController(title: "Your current score is \(score)", message: nil, preferredStyle: .alert)
+        scoreAlert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(scoreAlert, animated: true)
+    }
 }
-
